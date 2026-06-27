@@ -1,0 +1,111 @@
+# ================================================================
+# SmartHire AI — Application Configuration
+# ================================================================
+# This file is the central nervous system of configuration.
+# Spring Boot reads this file at startup and applies all settings.
+# ================================================================
+
+# ----- Server Configuration -----
+server:
+  port: 8080    # The port our backend runs on (http://localhost:8080)
+
+# ----- Spring Core Configuration -----
+spring:
+
+  # ----- Application Name -----
+  application:
+    name: smarthire-backend
+
+  # ----- Database Configuration -----
+  # Connects to a MySQL database called 'smarthire_db'.
+  # Make sure MySQL is running and this database exists before starting the app.
+  datasource:
+    url: jdbc:mysql://localhost:3306/smarthire_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  # ----- JPA / Hibernate Configuration -----
+  jpa:
+    hibernate:
+      # 'update' means Hibernate will automatically create/update tables based on our entity classes.
+      # In production, you'd use 'validate' or a migration tool like Flyway.
+      ddl-auto: update
+    show-sql: true              # Print SQL queries to console (helpful during development)
+    properties:
+      hibernate:
+        format_sql: true        # Pretty-print SQL queries for readability
+        dialect: org.hibernate.dialect.MySQLDialect
+
+  # ----- File Upload Configuration -----
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 10MB       # Maximum size for a single uploaded file
+      max-request-size: 10MB    # Maximum size for the entire request
+
+  # ----- Email Configuration -----
+  # Using Gmail SMTP as an example. Replace with your actual email credentials.
+  # For Gmail, you'll need to generate an "App Password" (not your regular password).
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: your-email@gmail.com        # TODO: Replace with your actual email
+    password: your-app-password            # TODO: Replace with your Gmail App Password
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+# ================================================================
+# Custom Application Properties
+# ================================================================
+# These are our own custom properties — not part of Spring Boot.
+# We'll read them in our Java code using @Value annotations.
+# ================================================================
+
+# ----- JWT Configuration -----
+app:
+  jwt:
+    # Secret key used to sign JWT tokens. In production, use an environment variable.
+    # This MUST be at least 256 bits (32 characters) for HS256 algorithm.
+    secret: SmartHireAI-Super-Secret-JWT-Key-That-Is-At-Least-256-Bits-Long-2024
+    # Token expiration time in milliseconds (24 hours = 86400000 ms)
+    expiration-ms: 86400000
+
+  # ----- File Storage Configuration -----
+  file:
+    # Directory where uploaded resume PDFs will be stored on the server
+    upload-dir: ./uploads/resumes
+
+  # ----- AI API Configuration -----
+  ai:
+    # Gemini API key — get yours from https://makersuite.google.com/app/apikey
+    gemini:
+      api-key: your-gemini-api-key-here    # TODO: Replace with your actual Gemini API key
+      model: gemini-2.0-flash               # The Gemini model to use
+      api-url: https://generativelanguage.googleapis.com/v1beta/models
+
+# ================================================================
+# Swagger / OpenAPI Configuration
+# ================================================================
+springdoc:
+  api-docs:
+    path: /api-docs               # JSON spec available at http://localhost:8080/api-docs
+  swagger-ui:
+    path: /swagger-ui.html        # Swagger UI at http://localhost:8080/swagger-ui.html
+    operations-sorter: method     # Sort endpoints by HTTP method
+
+# ================================================================
+# Logging Configuration
+# ================================================================
+logging:
+  level:
+    root: INFO
+    com.smarthire: DEBUG           # Our application code logs at DEBUG level
+    org.springframework.security: DEBUG   # Helpful during development to see security decisions
+    org.hibernate.SQL: DEBUG              # Show SQL queries
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
