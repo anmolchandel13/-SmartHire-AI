@@ -1,0 +1,39 @@
+# ===== Compiled Output =====
+target/
+*.class
+
+# ===== IDE Files =====
+.idea/
+*.iml
+*.iws
+.vscode/
+.settings/
+.project
+.classpath
+*.swp
+*.swo
+
+# ===== OS Files =====
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ===== Maven =====
+.mvn/
+mvnw
+mvnw.cmd
+
+# ===== Logs =====
+*.log
+logs/
+
+# ===== Uploaded Files =====
+uploads/
+
+# ===== Portable Maven (local install) =====
+apache-maven-*/
+
+# ===== Environment / Sensitive =====
+.env
+*.env
+application-secret.yml
